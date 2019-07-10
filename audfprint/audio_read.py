@@ -45,12 +45,12 @@ except ImportError:
 HAVE_FFMPEG = True
 
 def wavread(filename):
-  """Read in audio data from a wav file.  Return d, sr."""
-  # Read in wav file.
-  samplerate, wave_data = wav.read(filename)
-  # Normalize short ints to floats in range [-1..1).
-  data = np.asfarray(wave_data) / 32768.0
-  return data, samplerate
+    """Read in audio data from a wav file.  Return d, sr."""
+    # Read in wav file.
+    samplerate, wave_data = wav.read(filename)
+    # Normalize short ints to floats in range [-1..1).
+    data = np.asfarray(wave_data) / 32768.0
+    return data, samplerate
 
 
 def audio_read(filename, sr=None, channels=None):

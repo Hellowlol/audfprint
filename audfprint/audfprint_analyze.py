@@ -21,12 +21,12 @@ import struct
 import glob
 import time
 
-from audfprint import LOG
-from audfprint import audio_read
+from . import LOG
+from . import audio_read
 # For utility, glob2hashtable
-from audfprint import hash_table
+from . import hash_table
 
-from audfprint import stft
+from . import stft
 
 # ############### Globals ############### #
 # Special extension indicating precomputed fingerprint

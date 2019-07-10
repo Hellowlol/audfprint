@@ -3,11 +3,11 @@ import cProfile
 import pstats
 
 # noinspection PyUnresolvedReferences
-from audprint import audfprint
+from audfprint import cli
 
 
 
-def test_profile():
+def _test_profile():
     argv = ["audfprint", "new", "-d", "tmp.fpdb", "--density", "200",
             "data/Nine_Lives/01-Nine_Lives.mp3",
             "data/Nine_Lives/02-Falling_In_Love.mp3",
@@ -23,7 +23,7 @@ def test_profile():
             "data/Nine_Lives/12-Attitude_Adjustment.mp3",
             "data/Nine_Lives/13-Fallen_Angels.mp3"]
 
-    cProfile.run('audfprint.main(argv)', 'fpstats')
+    cProfile.run('cli.main(argv)', 'fpstats')
 
     p = pstats.Stats('fpstats')
 

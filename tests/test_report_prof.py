@@ -5,9 +5,10 @@
 import pstats
 import sys
 
-prof_file = 'profile.out'
-if len(sys.argv) > 1:
-    prof_file = sys.argv[1]
-p = pstats.Stats(prof_file)
-p.sort_stats('time')
-p.print_stats(200)
+def _zomg():
+    prof_file = 'profile.out'
+    if len(sys.argv) > 1:
+        prof_file = sys.argv[1]
+    p = pstats.Stats(prof_file)
+    p.sort_stats('time')
+    p.print_stats(200)

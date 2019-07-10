@@ -1,6 +1,8 @@
 # just run the damn maketests
 # https://github.com/dpwe/audfprint/blob/master/Makefile
 
+# base python audfprint.py --density 100 --skip-existing
+
 
 def test_onecore():
     pass
@@ -48,6 +50,7 @@ def test_mucore_precomp():
 
 def test_precompdir_mu():
     pass
+    # test_mucore_precomp
 
 
 def test_hash_mask():

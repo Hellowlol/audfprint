@@ -28,7 +28,7 @@ else:
     import cPickle as pickle  # Py2
     pickle_options = {}
 
-from audfprint import LOG
+from . import LOG
 
 # Current format version
 HT_VERSION = 20170724

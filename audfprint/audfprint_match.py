@@ -21,11 +21,11 @@ try:
 except:
     pass
 
-from audfprint import LOG
+from . import LOG
 
-from audfprint import audfprint_analyze
-from audfprint import audio_read
-from audfprint import stft
+from . import audfprint_analyze
+from . import audio_read
+from . import stft
 
 
 def process_info():
