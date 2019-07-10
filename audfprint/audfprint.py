@@ -9,6 +9,7 @@ Port of the Matlab implementation.
 2014-05-25 Dan Ellis dpwe@ee.columbia.edu
 """
 from __future__ import division, print_function
+from logging.handlers import RotatingFileHandler
 
 # For reporting progress time
 import time
@@ -24,11 +25,11 @@ import joblib
 from audfprint import LOG
 
 # The actual analyzer class/code
-import audfprint_analyze
+from audfprint import audfprint_analyze
 # Access to match functions, used in command line interface
-import audfprint_match
+from audfprint import audfprint_match
 # My hash_table implementation
-import hash_table
+from audfprint import hash_table
 
 
 if sys.version_info[0] >= 3:
@@ -323,19 +324,26 @@ def setup_matcher(args):
 # Command to construct the reporter object
 def setup_reporter(args):
     """ Creates a logging function, either to stderr or file"""
+    # not really sure how we should handle this.
+    # but lets do this for now.
+
     opfile = args['--opfile']
     if opfile and len(opfile):
-        f = open(opfile, "w")
+        # Add a file handle to the msges is written to the log.
+        rfh = RotatingFileHandler(opfile, 'a', 512000, 3)
+        LOG.addHandler(rfh)
 
         def report(msglist):
             """Log messages to a particular output file"""
             for msg in msglist:
-                f.write(msg + "\n")
+                LOG.info(msg)
+                # f.write(msg + "\n")
     else:
         def report(msglist):
             """Log messages by printing to stdout"""
             for msg in msglist:
-                print(msg)
+                LOG.info(msg)
+                # print(msg)
     return report
 
 
@@ -392,9 +400,10 @@ Options:
 __version__ = 20150406
 
 
-def main(argv):
+def main():
     """ Main routine for the command-line interface to audfprint """
     # Other globals set from command line
+    argv = sys.argv
     args = docopt.docopt(USAGE, version=__version__, argv=argv[1:])
 
     # Figure which command was chosen
@@ -409,7 +418,7 @@ def main(argv):
     cmd = cmdlist[0]
 
     # Setup output function
-    report = setup_reporter(args) # FFS
+    report = setup_reporter(args)
 
     # Keep track of wall time
     initticks = time_clock()
@@ -467,7 +476,7 @@ def main(argv):
     matcher = setup_matcher(args) if cmd == 'match' else None
 
     filename_iter = filename_list_iterator(
-            args['<file>'], args['--wavdir'], args['--wavext'], args['--list'])
+        args['<file>'], args['--wavdir'], args['--wavext'], args['--list'])
 
     #######################
     # Run the main commmand

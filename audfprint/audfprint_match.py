@@ -23,9 +23,9 @@ except:
 
 from audfprint import LOG
 
-import audfprint_analyze
-import audio_read
-import stft
+from audfprint import audfprint_analyze
+from audfprint import audio_read
+from audfprint import stft
 
 
 def process_info():
