@@ -24,6 +24,7 @@ import time
 import audio_read
 # For utility, glob2hashtable
 import hash_table
+from audfprint import LOG
 import stft
 
 # ############### Globals ############### #
@@ -86,7 +87,7 @@ def landmarks2hashes(landmarks):
     landmarks = np.array(landmarks)
     # Deal with special case of empty landmarks.
     if landmarks.shape[0] == 0:
-      return np.zeros((0, 2), dtype=np.int32)
+        return np.zeros((0, 2), dtype=np.int32)
     hashes = np.zeros((landmarks.shape[0], 2), dtype=np.int32)
     hashes[:, 0] = landmarks[:, 0]
     hashes[:, 1] = (((landmarks[:, 1] & B1_MASK) << B1_SHIFT)
@@ -287,7 +288,8 @@ class Analyzer(object):
         else:
             # The sgram is identically zero, i.e., the input signal was identically
             # zero.  Not good, but let's let it through for now.
-            print("find_peaks: Warning: input signal is identically zero.")
+            LOG.debug('find_peaks: Warning: input signal is identically zero.')
+            # print("find_peaks: Warning: input signal is identically zero.")
         # High-pass filter onset emphasis
         # [:-1,] discards top bin (nyquist) of sgram so bins fit in 8 bits
         sgram = np.array([scipy.signal.lfilter([1, -1],
@@ -329,7 +331,7 @@ class Analyzer(object):
                 for peak in peaks_at[col]:
                     pairsthispeak = 0
                     for col2 in range(col + self.mindt,
-                                       min(scols, col + self.targetdt)):
+                                      min(scols, col + self.targetdt)):
                         if pairsthispeak < self.maxpairsperpeak:
                             for peak2 in peaks_at[col2]:
                                 if abs(peak2 - peak) < self.targetdf:
@@ -357,11 +359,13 @@ class Analyzer(object):
                 # [d, sr] = librosa.load(filename, sr=self.target_sr)
                 d, sr = audio_read.audio_read(filename, sr=self.target_sr, channels=1)
             except Exception as e:  # audioread.NoBackendError:
-                message = "wavfile2peaks: Error reading " + filename
+                message = "wavfile2peaks: Error reading %s" % filename
                 if self.fail_on_error:
-                    print(e)
+                    # print(e)
+                    LOG.error('%s', message)
                     raise IOError(message)
-                print(message, "skipping")
+                LOG.debug('%s skipping', message)
+                # print(message, "skipping")
                 d = []
                 sr = self.target_sr
             # Store duration in a global because it's hard to handle
@@ -569,13 +573,16 @@ def glob2hashtable(pattern, density=20.0):
     totdur = 0.0
     tothashes = 0
     for ix, file_ in enumerate(filelist):
-        print(time.ctime(), "ingesting #", ix, ":", file_, "...")
+        LOG.debug('Ingesting #%s: %s ...', ix, file_)
+        # print(time.ctime(), "ingesting #", ix, ":", file_, "...")
         dur, nhash = g2h_analyzer.ingest(ht, file_)
         totdur += dur
         tothashes += nhash
     elapsedtime = time.clock() - initticks
-    print("Added", tothashes, "(", tothashes / totdur, "hashes/sec) at ",
-          elapsedtime / totdur, "x RT")
+    LOG.debug('Added %s %s hashes/sec at %s x RT',
+              tothashes, (tothashes / totdur), (elapsedtime / totdur))
+    # print("Added", tothashes, "(", tothashes / totdur, "hashes/sec) at ",
+    #      elapsedtime / totdur, "x RT")
     return ht
 
 

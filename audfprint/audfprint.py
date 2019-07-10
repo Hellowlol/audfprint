@@ -21,6 +21,8 @@ import sys
 import multiprocessing
 import joblib
 
+from audfprint import LOG
+
 # The actual analyzer class/code
 import audfprint_analyze
 # Access to match functions, used in command line interface
@@ -119,7 +121,8 @@ def file_precompute_peaks_or_hashes(analyzer, filename, precompdir,
 def file_precompute(analyzer, filename, precompdir, type='peaks', skip_existing=False, strip_prefix=None):
     """ Perform precompute action for one file, return list
         of message strings """
-    print(time.ctime(), "precomputing", type, "for", filename, "...")
+    LOG.info('%s precomputing %s for %s ...', time.ctime(), type, filename)
+    #print(time.ctime(), "precomputing", type, "for", filename, "...")
     hashes_not_peaks = (type == 'hashes')
     return file_precompute_peaks_or_hashes(analyzer, filename, precompdir,
                                            hashes_not_peaks=hashes_not_peaks,
@@ -406,7 +409,7 @@ def main(argv):
     cmd = cmdlist[0]
 
     # Setup output function
-    report = setup_reporter(args)
+    report = setup_reporter(args) # FFS
 
     # Keep track of wall time
     initticks = time_clock()
@@ -435,10 +438,9 @@ def main(argv):
             # Check that the output directory can be created before we start
             ensure_dir(os.path.split(dbasename)[0])
             # Create a new hash table
-            hash_tab = hash_table.HashTable(
-                    hashbits=int(args['--hashbits']),
-                    depth=int(args['--bucketsize']),
-                    maxtime=(1 << int(args['--maxtimebits'])))
+            hash_tab = hash_table.HashTable(hashbits=int(args['--hashbits']),
+                                            depth=int(args['--bucketsize']),
+                                            maxtime=(1 << int(args['--maxtimebits'])))
             # Set its samplerate param
             if analyzer:
                 hash_tab.params['samplerate'] = analyzer.target_sr
@@ -446,12 +448,14 @@ def main(argv):
         else:
             # Load existing hash table file (add, match, merge)
             if args['--verbose']:
-                report([time.ctime() + " Reading hash table " + dbasename])
+                LOG.debug('Reading hashtable %s', dbasename)
+                # report([time.ctime() + " Reading hash table " + dbasename])
             hash_tab = hash_table.HashTable(dbasename)
             if analyzer and 'samplerate' in hash_tab.params \
                     and hash_tab.params['samplerate'] != analyzer.target_sr:
                 # analyzer.target_sr = hash_tab.params['samplerate']
-                print("db samplerate overridden to ", analyzer.target_sr)
+                LOG.info('db samplerate overridden to %s', analyzer.target_sr)
+                # print("db samplerate overridden to ", analyzer.target_sr)
     else:
         # The command IS precompute
         # dummy empty hash table
@@ -488,10 +492,13 @@ def main(argv):
 
     elapsedtime = time_clock() - initticks
     if analyzer and analyzer.soundfiletotaldur > 0.:
-        print("Processed "
-              + "%d files (%.1f s total dur) in %.1f s sec = %.3f x RT" \
-              % (analyzer.soundfilecount, analyzer.soundfiletotaldur,
-                 elapsedtime, (elapsedtime / analyzer.soundfiletotaldur)))
+        LOG.debug('Processed %d files %.1f s total dur in %.1f s sec = %.3f x RT',
+                  analyzer.soundfilecount, analyzer.soundfiletotaldur,
+                  elapsedtime, (elapsedtime / analyzer.soundfiletotaldur))
+        # print("Processed "
+        #      + "%d files (%.1f s total dur) in %.1f s sec = %.3f x RT" \
+        #      % (analyzer.soundfilecount, analyzer.soundfiletotaldur,
+        #         elapsedtime, (elapsedtime / analyzer.soundfiletotaldur)))
 
     # Save the hash table file if it has been modified
     if hash_tab and hash_tab.dirty:

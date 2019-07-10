@@ -21,6 +21,8 @@ try:
 except:
     pass
 
+from audfprint import LOG
+
 import audfprint_analyze
 import audio_read
 import stft
@@ -40,7 +42,8 @@ def process_info():
 
 def log(message):
     """ log info with stats """
-    print('%s physmem=%s utime=%s %s' % (time.ctime(), process_info()))
+    LOG.debug('physmem=%s utime=%s %s' % process_info(), message)
+    # print('%s physmem=%s utime=%s %s' % (time.ctime(), process_info()))
 
 
 def encpowerof2(val):
@@ -368,9 +371,11 @@ class Matcher(object):
                 numberstring = "#%d" % number
             else:
                 numberstring = ""
-            print(time.ctime(), "Analyzed", numberstring, filename, "of",
-                  ('%.3f' % durd), "s "
-                                   "to", len(q_hashes), "hashes")
+            LOG.debug('Analyzed %s %s of %.3f s to %s hashes',
+                      numberstring, filename, durd, len(q_hashes))
+            # print(time.ctime(), "Analyzed", numberstring, filename, "of",
+            #      ('%.3f' % durd), "s "
+            #                       "to", len(q_hashes), "hashes")
         # Run query
         rslts = self.match_hashes(ht, q_hashes)
         # Post filtering
@@ -378,6 +383,7 @@ class Matcher(object):
             rslts = rslts[(-rslts[:, 2]).argsort(), :]
         return rslts[:self.max_returns, :], durd, len(q_hashes)
 
+    # WTF should we do about this.
     def file_match_to_msgs(self, analyzer, ht, qry, number=None):
         """ Perform a match on a single input file, return list
             of message strings """
@@ -459,10 +465,11 @@ class Matcher(object):
                  np.array([[x[1], x[2]] for x in mlms]).T,
                  '.-r')
         # Add title
-        plt.title(filename + " : Matched as " + ht.names[results[0][0]]
-                  + (" with %d of %d hashes" % (len(matchhashes),
-                                                len(q_hashes))))
+        title = '%s :Matched as %s (with %d of %d hashes' % (
+                ht.names[results[0][0]], len(matchhashes), len(q_hashes))
+
         # Display
+        plt.title(title)
         plt.show()
         # Return
         return results

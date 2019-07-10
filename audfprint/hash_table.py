@@ -28,6 +28,7 @@ else:
     import cPickle as pickle  # Py2
     pickle_options = {}
 
+from audfprint import LOG
 
 # Current format version
 HT_VERSION = 20170724
@@ -192,9 +193,11 @@ class HashTable(object):
         nhashes = sum(self.counts)
         # Report the proportion of dropped hashes (overfull table)
         dropped = nhashes - sum(np.minimum(self.depth, self.counts))
-        print("Saved fprints for", sum(n is not None for n in self.names),
-              "files (", nhashes, "hashes) to", name,
-              "(%.2f%% dropped)" % (100.0 * dropped / max(1, nhashes)))
+        LOG.debug('Saved fprint for %s files (%s hashes) to %s (%.2f%% dropped)',
+                  sum(n is not None for n in self.names), nhashes, name, (100.0 * dropped / max(1, nhashes)))
+        # print("Saved fprints for", sum(n is not None for n in self.names),
+        #      "files (", nhashes, "hashes) to", name,
+        #      "(%.2f%% dropped)" % (100.0 * dropped / max(1, nhashes)))
 
     def load(self, name):
         """ Read either pklz or mat-format hash table file """
@@ -206,9 +209,11 @@ class HashTable(object):
         nhashes = sum(self.counts)
         # Report the proportion of dropped hashes (overfull table)
         dropped = nhashes - sum(np.minimum(self.depth, self.counts))
-        print("Read fprints for", sum(n is not None for n in self.names),
-              "files (", nhashes, "hashes) from", name,
-              "(%.2f%% dropped)" % (100.0 * dropped / max(1, nhashes)))
+        LOG.debug('Read fprint for %s files (%s hashes) from %s (%.2f%% dropped)',
+                  sum(n is not None for n in self.names), nhashes, name, (100.0 * dropped / max(1, nhashes)))
+        # print("Read fprints for", sum(n is not None for n in self.names),
+        #      "files (", nhashes, "hashes) from", name,
+        #      "(%.2f%% dropped)" % (100.0 * dropped / max(1, nhashes)))
 
     def load_pkl(self, name, file_object=None):
         """ Read hash table values from pickle file <name>. """
@@ -361,7 +366,8 @@ class HashTable(object):
         self.names[id_] = None
         self.hashesperid[id_] = 0
         self.dirty = True
-        print("Removed", name, "(", hashes_removed, "hashes).")
+        LOG.debug('Removed %s (%s) hashes.', name, hashes_removed)
+        # print("Removed", name, "(", hashes_removed, "hashes).")
 
     def retrieve(self, name):
         """Return an np.array of (time, hash) pairs found in the table."""
@@ -384,8 +390,9 @@ class HashTable(object):
 
     def list(self, print_fn=None):
         """ List all the known items. """
-        if not print_fn:
-            print_fn = print
+        # print_fn is not in use but keeping it for compat.
+
         for name, count in zip(self.names, self.hashesperid):
             if name:
-                print_fn(name + " (" + str(count) + " hashes)")
+                LOG.info('%s (%s) hashes', name, count)
+                #print_fn(name + " (" + str(count) + " hashes)")
