@@ -9,7 +9,7 @@ import pstats
 import audfprint
 
 
-def zomg():
+def _zomg():
     argv = ["audfprint", "match", "-d", "fpdbase.pklz", "--density", "200", "query.mp3"]
 
     cProfile.run('audfprint.cli.main(argv)', 'fpmstats')

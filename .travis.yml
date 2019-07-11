@@ -1,0 +1,18 @@
+language: python
+
+before_install:
+    - pip install --upgrade pip
+    - pip install --upgrade codecov pypandoc pytest pytest-cov pytest-mock
+install: "pip install --no-cache-dir -e ."
+# Lets do python tests later.
+#script: py.test -vv -s --cov=$TRAVIS_BUILD_DIR/au/ --cov-report term-missing
+script: make Makefile test
+#after_success: codecov
+#deploy:
+#  provider: pypi
+#  user: username
+#  password:
+#    secure: token
+#  on:
+#    tags: true
+#    branch: master
