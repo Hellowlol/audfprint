@@ -25,7 +25,7 @@ test_remove: fpdbase.pklz
 	${AUDFPRINT} list --dbase fpdbase.pklz
 	${AUDFPRINT} match --dbase fpdbase.pklz query.mp3
 
-fpdbase.pklz: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
+fpdbase.pklz: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	${AUDFPRINT} new --dbase fpdbase.pklz Nine_Lives/0*.mp3
 	${AUDFPRINT} add --dbase fpdbase.pklz Nine_Lives/1*.mp3
 
@@ -42,7 +42,7 @@ test_onecore_newmerge: precompdir
 	${AUDFPRINT} newmerge --dbase fpdbase2.pklz fpdbase0.pklz fpdbase1.pklz
 	${AUDFPRINT} match --dbase fpdbase2.pklz precompdir/query.afpt
 
-precompdir: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
+precompdir: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	rm -rf precompdir
 	mkdir precompdir
 	${AUDFPRINT} precompute --precompdir precompdir Nine_Lives/*.mp3
@@ -55,7 +55,7 @@ test_onecore_precomppk: precomppkdir
 	${AUDFPRINT} match --dbase fpdbase1.pklz precomppkdir/query.afpk
 	rm -rf precomppkdir
 
-precomppkdir: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
+precomppkdir: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	rm -rf precomppkdir
 	mkdir precomppkdir
 	${AUDFPRINT} precompute --precompute-peaks --precompdir precomppkdir Nine_Lives/*.mp3
@@ -64,7 +64,7 @@ precomppkdir: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
 test_mucore: fpdbase_mu.pklz
 	${AUDFPRINT} match --dbase fpdbase_mu.pklz --ncores 4 query.mp3
 
-fpdbase_mu.pklz: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
+fpdbase_mu.pklz: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	${AUDFPRINT} new --dbase fpdbase_mu.pklz --ncores 4 Nine_Lives/0*.mp3
 	${AUDFPRINT} add --dbase fpdbase_mu.pklz --ncores 4 Nine_Lives/1*.mp3
 
@@ -74,7 +74,7 @@ test_mucore_precomp: precompdir_mu
 	${AUDFPRINT} merge --dbase fpdbase_mu.pklz fpdbase_mu0.pklz
 	${AUDFPRINT} match --dbase fpdbase_mu.pklz --ncores 4 precompdir_mu/query.afpt precompdir_mu/query.afpt precompdir_mu/query.afpt precompdir_mu/query.afpt precompdir_mu/query.afpt precompdir_mu/query.afpt precompdir_mu/query.afpt
 
-precompdir_mu: audfprint.py audfprint_analyze.py audfprint_match.py hash_table.py
+precompdir_mu: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	rm -rf precompdir_mu
 	mkdir precompdir_mu
 	${AUDFPRINT} precompute --ncores 4 --precompdir precompdir_mu Nine_Lives/*.mp3
