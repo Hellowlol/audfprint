@@ -46,7 +46,7 @@ precompdir: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.p
 	rm -rf precompdir
 	mkdir precompdir
 	${AUDFPRINT} precompute --precompdir precompdir tests/data/Nine_Lives/*.mp3
-	${AUDFPRINT} precompute --precompdir precompdir --shifts 4 query.mp3
+	${AUDFPRINT} precompute --precompdir precompdir --shifts 4 tests/data/query.mp3
 
 test_onecore_precomppk: precomppkdir
 	${AUDFPRINT} new --dbase fpdbase0.pklz precomppkdir/Nine_Lives/0*
@@ -59,10 +59,10 @@ precomppkdir: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match
 	rm -rf precomppkdir
 	mkdir precomppkdir
 	${AUDFPRINT} precompute --precompute-peaks --precompdir precomppkdir tests/data/Nine_Lives/*.mp3
-	${AUDFPRINT} precompute --precompute-peaks --precompdir precomppkdir --shifts 4 query.mp3
+	${AUDFPRINT} precompute --precompute-peaks --precompdir precomppkdir --shifts 4 tests/data/query.mp3
 
 test_mucore: fpdbase_mu.pklz
-	${AUDFPRINT} match --dbase fpdbase_mu.pklz --ncores 4 query.mp3
+	${AUDFPRINT} match --dbase fpdbase_mu.pklz --ncores 4 tests/data/query.mp3
 
 fpdbase_mu.pklz: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	${AUDFPRINT} new --dbase fpdbase_mu.pklz --ncores 4 tests/data/Nine_Lives/0*.mp3
@@ -78,8 +78,8 @@ precompdir_mu: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_matc
 	rm -rf precompdir_mu
 	mkdir precompdir_mu
 	${AUDFPRINT} precompute --ncores 4 --precompdir precompdir_mu tests/data/Nine_Lives/*.mp3
-	${AUDFPRINT} precompute --ncores 4 --precompdir precompdir_mu --shifts 4 query.mp3 query.mp3 query.mp3 query.mp3 query.mp3 query.mp3
+	${AUDFPRINT} precompute --ncores 4 --precompdir precompdir_mu --shifts 4 tests/data/query.mp3 tests/data/query.mp3 tests/data/query.mp3 tests/data/query.mp3 tests/data/query.mp3 tests/data/query.mp3
 
 test_hash_mask: 
 	${AUDFPRINT} new --dbase fpdbase.pklz --hashbits 16 tests/data/Nine_Lives/*.mp3
-	${AUDFPRINT} match --dbase fpdbase.pklz query.mp3
+	${AUDFPRINT} match --dbase fpdbase.pklz tests/data/query.mp3
