@@ -31,7 +31,7 @@ from __future__ import print_function
 import os
 import sys
 
-import audfprint
+from audfprint.cli import main
 
 try:
     # noinspection PyCompatibility
@@ -96,4 +96,4 @@ argv = ["audfprint", "match",
         "--list", fileList4query]
 
 # Run audfprint
-audfprint.main(argv)
+main(argv)

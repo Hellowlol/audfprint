@@ -25,7 +25,7 @@ from __future__ import print_function
 import os
 import sys
 
-import audfprint
+from audfprint import cli
 
 try:
     # noinspection PyCompatibility
@@ -72,7 +72,7 @@ print(sys.argv[0], "density:", density, "fanout:", fanout,
       "bucketsize:", bucketsize, "ncores:", ncores)
 
 # Ensure the database directory exists
-audfprint.ensure_dir(dir4db)
+cli.ensure_dir(dir4db)
 
 # Run the command
 argv = ["audfprint", "new",
@@ -84,4 +84,4 @@ argv = ["audfprint", "new",
         "--list", fileList4db]
 
 # Run audfprint
-audfprint.main(argv)
+cli.main(argv)
