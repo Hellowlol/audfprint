@@ -1,4 +1,12 @@
 language: python
+addons:
+  apt:
+    sources:
+    - sourceline: "ppa:mc3man/trusty-media"
+    update: true
+    packages:
+    - ffmpeg
+    - pandoc
 
 before_install:
     - pip install --upgrade pip
