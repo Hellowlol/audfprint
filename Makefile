@@ -16,14 +16,14 @@ test: test_onecore test_onecore_precomp test_onecore_newmerge test_onecore_preco
 	rm -f fpdbase*.pklz
 
 test_onecore: fpdbase.pklz
-	${AUDFPRINT} match --dbase fpdbase.pklz query.mp3
+	${AUDFPRINT} match --dbase fpdbase.pklz tests/data/query.mp3
 
 test_remove: fpdbase.pklz
 	${AUDFPRINT} remove --dbase fpdbase.pklz tests/data/Nine_Lives/05-Full_Circle.mp3 tests/data/Nine_Lives/01-Nine_Lives.mp3
 	${AUDFPRINT} list --dbase fpdbase.pklz
 	${AUDFPRINT} add --dbase fpdbase.pklz tests/data/Nine_Lives/01-Nine_Lives.mp3 tests/data/Nine_Lives/05-Full_Circle.mp3
 	${AUDFPRINT} list --dbase fpdbase.pklz
-	${AUDFPRINT} match --dbase fpdbase.pklz query.mp3
+	${AUDFPRINT} match --dbase fpdbase.pklz tests/data/query.mp3
 
 fpdbase.pklz: audfprint audfprint/audfprint_analyze.py audfprint/audfprint_match.py audfprint/hash_table.py
 	${AUDFPRINT} new --dbase fpdbase.pklz tests/data/Nine_Lives/0*.mp3
