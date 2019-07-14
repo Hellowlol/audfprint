@@ -9,9 +9,12 @@ def test_onecore(fpdbase_pklz, query):
     run(x)
 
 
-def _test_remove():
-    pass
-
+def test_remove(fpdbase_pklz, query):
+    run(['audfprint', 'remove', '--dbase', fpdbase_pklz, 'tests/data/Nine_Lives/05-Full_Circle.mp3', 'tests/data/Nine_Lives/01-Nine_Lives.mp3'])
+    run(['audfprint', 'list', '--dbase', fpdbase_pklz])
+    run(['audfprint', 'add', '--dbase', fpdbase_pklz, 'tests/data/Nine_Lives/01-Nine_Lives.mp3', 'tests/data/Nine_Lives/05-Full_Circle.mp3'])
+    run(['audfprint', 'list', '--dbase', fpdbase_pklz])
+    run(['audfprint', 'match','--dbase', fpdbase_pklz, query])
 
 def _test_fpdbase_pklz():
     pass

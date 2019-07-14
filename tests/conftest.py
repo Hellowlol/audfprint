@@ -28,11 +28,17 @@ def fpdbase_pklz_path(testdir):
 def fpdbase_pklz(fpdbase_pklz_path):
     """Recreate fpdbase_pklz"""
     fps = glob.glob('tests/data/Nine_Lives/0*.mp3')
+    # new
     args = ['audfprint', 'new', '--density', '100', '--skip-existing',
             '--dbase', fpdbase_pklz_path] + fps
 
-    sys.argv = args
-    audfprint.cli.main()
+    run(args)
+
+    # add
+    fps = glob.glob('tests/data/Nine_Lives/1*.mp3')
+    add_args = ['audfprint', 'add', '--dbase', fpdbase_pklz_path] + fps
+
+    run(add_args)
     return fpdbase_pklz_path
 
 
